@@ -20,7 +20,9 @@ public:
     void rotate(const Vector4&);
 protected:
     Vector4 position;
+    Vector4 rotation;
     std::vector<Vector4*> points;
+    std::vector<Vector4*> rawPoints;
     std::vector<Body*> bodys;
 };
 

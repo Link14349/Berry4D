@@ -81,3 +81,5 @@ R_w=\left[\begin{array}{ccc}
 0 & 0 & 0 & 1
 \end{array}\right]
 $$
+**!!!: Note that the length of the column vector of this rotation matrix is greater than 1, which needs to be manually divided back, otherwise there will be amplification effect!**  
+**!!!: 注意，这个旋转矩阵的列向量长度大于1需要手动除回去否则会有放大效应！**

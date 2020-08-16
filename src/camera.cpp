@@ -41,18 +41,18 @@ void Camera::render() {
             glEnd();
 
             // 绘制顶点连线
-            glBegin(GL_LINES);
-
-            glColor3f(1, 1, 1);
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = i + 1; j < 4; j++) {
-                    glVertex3fv((GLfloat*)(TPoints + body->points[i]));
-                    glVertex3fv((GLfloat*)(TPoints + body->points[j]));
-                }
-            }
-
-            glEnd();
+//            glBegin(GL_LINES);
+//
+//            glColor3f(1, 1, 1);
+//            for (int i = 0; i < 3; i++)
+//            {
+//                for (int j = i + 1; j < 4; j++) {
+//                    glVertex3fv((GLfloat*)(TPoints + body->points[i]));
+//                    glVertex3fv((GLfloat*)(TPoints + body->points[j]));
+//                }
+//            }
+//
+//            glEnd();
         }
     }
 }

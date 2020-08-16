@@ -1,9 +1,6 @@
 #include "../include/vec.h"
 #include <cmath>
 
-void rotationMatrix(const Vector4& rotation, float A[4][4]) {
-    rotationMatrix(rotation.x, rotation.y, rotation.z, rotation.w, A);
-}
 void rotationMatrix(float tx, float ty, float tz, float tw, float A[4][4]) {
     float sx = sin(tx), sy = sin(ty), sz = sin(tz), sw = sin(tw);
     float cx = cos(tx), cy = cos(ty), cz = cos(tz), cw = cos(tw);
@@ -75,8 +72,22 @@ void rotationMatrix(float tx, float ty, float tz, float tw, float A[4][4]) {
 //    A[0][2] *= zbasen, A[1][2] *= zbasen, A[2][2] *= zbasen, A[3][2] *= zbasen;
 //    A[0][3] *= wbasen, A[1][3] *= wbasen, A[2][3] *= wbasen, A[3][3] *= wbasen;
 }
+void rotationMatrix(const Vector4& rotation, float A[4][4]) {
+    rotationMatrix(rotation.x, rotation.y, rotation.z, rotation.w, A);
+}
 
-void Vector4::rotate(float A[4][4]) {
+void Vector4::rotate(const Vector4& raw, const float A[4][4]) {
+    auto l1 = raw.mod2();
+    x = A[0][0] * raw.x + A[0][1] * raw.y + A[0][2] * raw.z + A[0][3] * raw.w;
+    y = A[1][0] * raw.x + A[1][1] * raw.y + A[1][2] * raw.z + A[1][3] * raw.w;
+    z = A[2][0] * raw.x + A[2][1] * raw.y + A[2][2] * raw.z + A[2][3] * raw.w;
+    w = A[3][0] * raw.x + A[3][1] * raw.y + A[3][2] * raw.z + A[3][3] * raw.w;
+    auto l2 = mod2();
+    operator*=(sqrt(l1 / l2));
+}
+
+void Vector4::rotate(const float A[4][4]) {
+    auto l1 = mod2();
     float x_ = A[0][0] * x + A[0][1] * y + A[0][2] * z + A[0][3] * w;
     float y_ = A[1][0] * x + A[1][1] * y + A[1][2] * z + A[1][3] * w;
     float z_ = A[2][0] * x + A[2][1] * y + A[2][2] * z + A[2][3] * w;
@@ -85,4 +96,6 @@ void Vector4::rotate(float A[4][4]) {
     y = y_;
     z = z_;
     w = w_;
+    auto l2 = mod2();
+    operator*=(sqrt(l1 / l2));
 }

@@ -1,13 +1,12 @@
 #include "../include/object.h"
 
-
-void Object::rotate(const Vector4 &rotation) {
+void Object::rotate(const Vector4 &r) {
     float A[4][4];
+    rotation += r;
     rotationMatrix(rotation, A);
+    auto rp = rawPoints.begin();
     for (auto point : points) {
-        auto l1 = point->mod2();
-        point->rotate(A);
-        auto l2 = point->mod2();
-        point->operator*=(sqrt(l1 / l2));
+        point->rotate(**rp, A);
+        rp++;
     }
 }

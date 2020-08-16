@@ -59,14 +59,16 @@ public:
         w *= a;
         return *this;
     }
-    float mod2() { return x * x + y * y + z * z + w * w; }
-    float mod() { return sqrt(x * x + y * y + z * z + w * w); }
-    void rotate(float[4][4]);
+    float mod2() const { return x * x + y * y + z * z + w * w; }
+    float mod() const { return sqrt(x * x + y * y + z * z + w * w); }
+    void rotate(const float[4][4]);
+    void rotate(const Vector4&, const float[4][4]);
     float x, y, z, w;
 };
 
-void rotationMatrix(const Vector4&, float[4][4]);
+
 void rotationMatrix(float, float, float, float, float[4][4]);
+void rotationMatrix(const Vector4& rotation, float A[4][4]);
 
 
 #endif //BERRY4D_VEC_H

@@ -8,7 +8,7 @@ public:
     Cube(float x, float y, float z, float w) {
         static Vector4* zero = new Vector4;
         x *= .5, y *= .5, z *= .5, w *= .5;
-#define CUBE_PUSH_POINT(a, b, c, d) points.push_back(new Vector4(a x, b y, c z, d w));
+#define CUBE_PUSH_POINT(a, b, c, d) { points.push_back(new Vector4(a x, b y, c z, d w)); rawPoints.push_back(new Vector4(a x, b y, c z, d w)); }
 #define CUBE_GET_POINT_ID(x, y, z, w) x | (y << 1) | (z << 2) | (w << 3)
         CUBE_PUSH_POINT( , , , )
         CUBE_PUSH_POINT(-, , , )
