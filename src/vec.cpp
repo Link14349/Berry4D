@@ -7,11 +7,11 @@ void rotationMatrix(const Vector4& rotation, float A[4][4]) {
 void rotationMatrix(float tx, float ty, float tz, float tw, float A[4][4]) {
     float sx = sin(tx), sy = sin(ty), sz = sin(tz), sw = sin(tw);
     float cx = cos(tx), cy = cos(ty), cz = cos(tz), cw = cos(tw);
-    float xl = 1 / sqrt(1 + sx * sx), yl = 1 / sqrt(1 + sy * sy), zl = 1 / sqrt(1 + sz * sz), wl = 1 / sqrt(1 + sw * sw);
-    sx *= xl, cx *= xl;
-    sy *= yl, cy *= yl;
-    sz *= zl, cz *= zl;
-    sw *= wl, cw *= wl;
+//    float xl = 1 / sqrt(1 + sx * sx), yl = 1 / sqrt(1 + sy * sy), zl = 1 / sqrt(1 + sz * sz), wl = 1 / sqrt(1 + sw * sw);
+//    sx *= xl, cx *= xl;
+//    sy *= yl, cy *= yl;
+//    sz *= zl, cz *= zl;
+//    sw *= wl, cw *= wl;
     float sxsy = sx * sy;
     float cxcy = cx * cy;
     float cxsy = cx * sy;

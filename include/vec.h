@@ -52,6 +52,15 @@ public:
     float operator*(const Vector4 &vec) const {
         return MATH_VEC_OP(x, *) + MATH_VEC_OP(y, *) + MATH_VEC_OP(z, *) + MATH_VEC_OP(w, *);
     }
+    Vector4& operator*=(const float a) {
+        x *= a;
+        y *= a;
+        z *= a;
+        w *= a;
+        return *this;
+    }
+    float mod2() { return x * x + y * y + z * z + w * w; }
+    float mod() { return sqrt(x * x + y * y + z * z + w * w); }
     void rotate(float[4][4]);
     float x, y, z, w;
 };
