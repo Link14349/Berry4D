@@ -69,6 +69,8 @@ public:
 
 void rotationMatrix(float, float, float, float, float[4][4]);
 void rotationMatrix(const Vector4& rotation, float A[4][4]);
+void normal(Vector4& target, const Vector4& a, const Vector4& b, const Vector4& c);
+void normal3D(Vector4& target, const Vector4& a, const Vector4& b, const Vector4& c);
 
 
 #endif //BERRY4D_VEC_H

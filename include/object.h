@@ -2,6 +2,7 @@
 #define BERRY4D_OBJECT_H
 
 #include <vector>
+#include <list>
 #include "vec.h"
 
 class Object {
@@ -18,11 +19,13 @@ public:
         unsigned points[4];
     };
     void rotate(const Vector4&);
-protected:
     Vector4 position;
+protected:
+    void normal();
     Vector4 rotation;
     std::vector<Vector4*> points;
-    std::vector<Vector4*> rawPoints;
+    std::list<Vector4*> rawPoints;
+    std::list<Vector4*> rawNormals;
     std::vector<Body*> bodys;
 };
 

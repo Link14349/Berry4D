@@ -4,15 +4,17 @@
 #include "include/cube.h"
 
 Cube cube(1, 1, 1, 1);
-#define V 0.03
+#define V 0.01
 void cb() {
-    cube.rotate(Vector4(V, V, V, 0));
+    cube.rotate(Vector4(V, V, V, V));
+//    cube.position.x -= 0.01;
 }
 
 int main() {
     Berry4D berry4D("Berry4D");
     Scene scene;
     Camera camera;
+    cube.position.w = 1;
     camera.position.w = -2;
     berry4D.use(&scene);
     scene.use(&camera);
