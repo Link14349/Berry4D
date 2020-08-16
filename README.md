@@ -1,3 +1,4 @@
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 # Berry4D  
 This is a simple projection of four-dimensional objects into three-dimensional space, and then the projection objects are presented on the 2D screen.  
 这是一个简单的将四维物体投影到三维空间中再将投影物体呈现在2D屏幕上的程序.
@@ -36,8 +37,8 @@ y   z
 #### 2.1 Camera Settings 相机设置
 In camera coordinates, we set the camera to point in the positive direction of the w axis.  
 在相机坐标中，我们设定相机指向w轴正方向.
-The camera has three line of sight angles ` f_ x`, `f_ y`, `f_ z` is used to describe half of the viewing angle of the camera in the x, y, z axes.  
-相机拥有三个视线角`f_x`, `f_y`, `f_z`用来描述相机在x, y, z轴方向上可观察范围角度的一半.
+The camera has three line of sight angles $f_ x$, $f_ y$, $f_ z$ is used to describe half of the viewing angle of the camera in the x, y, z axes.  
+相机拥有三个视线角$f_x$, $f_y$, $f_z$用来描述相机在x, y, z轴方向上可观察范围角度的一半.
 #### 2.2 Projection: Perspective Projection 投影: 透视投影
 $$
 \begin{cases}
