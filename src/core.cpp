@@ -31,37 +31,20 @@ int Berry4D::render(void (*cb)()) {
     float invh = 1 / height();
 //    glPolygonMode(GL_FRONT, GL_LINE);
 //    float x1 = -1, y1 = -1;
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
+//    gluPerspective(2.1, 1, 0.1, 100);
     while(!glfwWindowShouldClose(win)){
         glfwGetWindowSize(win, &w, &h);
         glMatrixMode(GL_PROJECTION);
         glClearColor (0.0, 0.0, 0.0, 0.0);
         glClearDepth(1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_STENCIL);
         glDepthFunc(GL_LESS);
         glLoadIdentity();
         auto start = getCurrentTime();
         scene->render();
-//        {
-//            glBegin(GL_TRIANGLES);
-//            GLfloat a[] = {
-//                    0, 0.5, 0,
-//                    .5, -0.5, 0,
-//                    -0.5, -0.5, 0,
-//                    0, .25, 0.5,
-//                    .5, -.25, -0.5,
-//                    -0.5, -.25, -0.5,
-//            };
-//            glColor3f(0.9, 0.9, 0.9);
-//            glVertex3fv(a + 9);
-//            glVertex3fv(a + 12);
-//            glVertex3fv(a + 15);
-//            glColor3f(0.5, 0.5, 0.5);
-//            glVertex3fv(a);
-//            glVertex3fv(a + 3);
-//            glVertex3fv(a + 6);
-//            glEnd();
-//        }
         if (cb) cb();
         auto end = getCurrentTime();
         glfwSetWindowTitle(win, (title + " FPS: " + std::to_string(1000 / (float)(end - start))).c_str());

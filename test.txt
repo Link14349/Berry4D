@@ -1,57 +1,62 @@
-void rotationMatrix(float tx, float ty, float tz, float tw, float A[4][4]) {
-    float sx = sin(tx), sy = sin(ty), sz = sin(tz), sw = sin(tw);
-    float cx = cos(tx), cy = cos(ty), cz = cos(tz), cw = cos(tw);
-    float sxsy = sx * sy;
-    float cxcy = cx * cy;
-    float cxsy = cx * sy;
-    float TMP1 = (((cy)) * (cz) + ((sy)) * (sz));
-    float TMP2 = (((cy)) * (-sz) + ((sy)) * (-sz));
-    float TMP12 = ((sx)) * (sz);
-    float TMP13 = ((sx)) * (cz);
-    float TMP3 = TMP12 + (sxsy + cxcy) * (sz);
-    float TMP4 = TMP13 + (sxsy + cxcy) * (-sz);
-    float TMP5 = (-sx) * (cy) + (-sxsy);
-    float TMP6 = 2 * sxsy;
-    float TMP7 = (-cxsy) + (-sxsy);
-    float TMP8 = ((-cxsy) + (sx) * (cy));
-    float TMP9 = sxsy + (-cxsy);
-    float TMP10 = (sxsy + (-sx) * (cy));
-    float TMP11 = ((cx)) * (cz);
-    float TMP14 = TMP8 * (sz);
-    float TMP15 = (cxcy + sxsy);
-    float TMP16 = (((-sx) * (cy) + cxsy));
-    A[0][0] = TMP1 * (cw) + TMP2 * (sw) - (((sy))) * (sw);
-    A[0][1] = TMP1 * (-sw) + TMP2 * (cw) + (((sy))) * (sw);
-    A[0][2] = TMP1 * (sw) + TMP2 * (-sw) + (((sy))) * (cw);
-    A[0][3] = (((cy)) * (-sz) + ((sy)) * (cz));
-    A[1][0] = ((TMP6) * (cz) + ((cx)) * (sz) + TMP10 * (sz)) * (cw) +
-              ((TMP6) * (-sz) + TMP11 + (sxsy + (sx) * (cy)) * (sz)) * (sw) +
-              ((TMP5)) * (-sw);
-    A[1][1] = ((TMP6) * (cz) + ((cx)) * (sz) + TMP10 * (sz)) * (-sw) +
-              ((TMP6) * (-sz) + TMP11 + TMP10 * (-sz)) * (cw) +
-              ((TMP5)) * (sw);
-    A[1][2] = ((TMP6) * (cz) + ((cx)) * (sz) + TMP10 * (sz)) * (sw) +
-              ((TMP6) * (-sz) + TMP11 + TMP10 * (-sz)) * (-sw) +
-              ((TMP5)) * (cw);
-    A[1][3] = ((TMP6) * (-sz) + ((cx)) * (sz) + TMP10 * (cz));
-    A[2][0] = ((TMP7) * (cz) + TMP12 + TMP14) * (cw) +
-              ((TMP7) * (-sz) + TMP13 + TMP8 * (-sz)) * (sw) +
-              (TMP15) * (-sw);
-    A[2][1] = ((TMP7) * (cz) + TMP12 + TMP14) * (-sw) +
-              ((TMP7) * (-sz) + TMP13 - TMP14) * (cw) +
-              (TMP15) * (sw);
-    A[2][2] = ((TMP7) * (cz) + TMP12 + TMP14) * (sw) +
-              ((TMP7) * (-sz) + TMP13 - TMP14) * (-sw) +
-              (TMP15) * (cw);
-    A[2][3] = ((TMP7) * (-sz) + TMP12 + TMP8 * (cz));
-    A[3][0] = ((TMP9) * (cz) + TMP3) * (cw) +
-              ((TMP9) * (-sz) + TMP4) * (sw) +
-              TMP16 * (-sw);
-    A[3][1] = ((TMP9) * (cz) + TMP3) * (-sw) +
-              ((TMP9) * (-sz) + TMP4) * (cw) +
-              TMP16 * (sw);
-    A[3][2] = ((TMP9) * (cz) + TMP3) * (sw) +
-              ((TMP9) * (-sz) + TMP4) * (-sw) +
-              TMP16 * (cw);
-    A[3][3] = ((TMP9) * (-sz) + TMP12 + (sxsy + cxcy) * (cz));
+#include <GLFW/glfw3.h>
+#include <GLUT/glut.h>
+#include <map>
+#include "../include/camera.h"
+#include "../include/scene.h"
+
+void Camera::render() {
+    auto& objects = scene->objects;
+    rotationMatrix(-rotation.x, -rotation.y, -rotation.z, -rotation.w, A);
+    Vector4 norm3d;// 用于存储投影体的某个面3d法线
+    for (auto object : objects) {
+        Vector4 TPoints[object->points.size()];
+        auto& objpos = object->position;
+        auto& points = object->points;
+        auto& bodys = object->bodys;
+        Vector4* tpoint = TPoints;
+        for (auto point : points) {
+            tpoint->operator=(*point);
+            tpoint->operator+=(objpos);
+            tpoint->operator-=(position);
+            tpoint->rotate(A);
+            tpoint->x /= tpoint->w * TAN_hfov_x;
+            tpoint->y /= tpoint->w * TAN_hfov_y;
+            tpoint->z /= tpoint->w * TAN_hfov_z;
+            tpoint++;
+        }
+//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        float c = -1;
+        const float step = .5f / bodys.size();
+        for (auto body : bodys) {
+            glBegin(GL_TRIANGLES);
+            for (int i = 0; i < 2; i++) {
+                for (int j = i + 1; j < 3; j++) {
+                    for (int k = j + 1; k < 4; k++) {
+                        auto p1 = TPoints + body->points[i], p2 = TPoints + body->points[j], p3 = TPoints + body->points[k];
+                        normal3D(norm3d, *p1, *p2, *p3);
+                        norm3d *= 1 / norm3d.mod();
+                        norm3d *= .5;
+                        if (norm3d.z < 0) norm3d *= -1;
+                        norm3d += .5;
+                        glColor3f(norm3d.x, norm3d.y, norm3d.z);
+                        glVertex3fv((GLfloat*)(TPoints + body->points[i]));
+                        glVertex3fv((GLfloat*)(TPoints + body->points[j]));
+                        glVertex3fv((GLfloat*)(TPoints + body->points[k]));
+                    }
+                }
+            }
+            c += step;
+            glEnd();
+
+//            glBegin(GL_LINES);
+//            glColor3f(1, 1, 1);
+//            for (int i = 0; i < 3; i++) {
+//                for (int j = i + 1; j < 4; j++) {
+//                    glVertex3fv((GLfloat*)(TPoints + body->points[i]));
+//                    glVertex3fv((GLfloat*)(TPoints + body->points[j]));
+//                }
+//            }
+//            glEnd();
+        }
+    }
 }

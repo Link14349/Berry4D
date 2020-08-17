@@ -4,6 +4,7 @@
 
 #include <string>
 #include <GLFW/glfw3.h>
+#include <GLUT/glut.h>
 
 class Scene;
 class Berry4D {

@@ -115,4 +115,5 @@ void normal3D(Vector4 &target, const Vector4 &a, const Vector4 &b, const Vector4
     target.x = ( + (a.y) * (b.z) - (a.z) * (b.y));
     target.y = -( + (a.x) * (b.z) - (a.z) * (b.x));
     target.z = ( + (a.x) * (b.y) - (a.y) * (b.x));
+    target.w = 0;
 }

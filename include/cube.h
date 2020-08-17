@@ -1,6 +1,7 @@
 #ifndef BERRY4D_CUBE_H
 #define BERRY4D_CUBE_H
 
+#include <iostream>
 #include "object.h"
 
 class Cube : public Object {

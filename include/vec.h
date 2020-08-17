@@ -28,6 +28,10 @@ public:
         MATH_VEC_OP(w, +=);
         return *this;
     }
+    Vector4 &operator+=(const float n) {
+        x += n, y += n, z += n, w += n;
+        return *this;
+    }
 
     Vector4 &operator-=(const Vector4 &vec) {
         MATH_VEC_OP(x, -=);
@@ -59,6 +63,7 @@ public:
         w *= a;
         return *this;
     }
+    bool operator==(const Vector4& vec) const { return x == vec.x && y == vec.y && z == vec.z && w == vec.w; }
     float mod2() const { return x * x + y * y + z * z + w * w; }
     float mod() const { return sqrt(x * x + y * y + z * z + w * w); }
     void rotate(const float[4][4]);
