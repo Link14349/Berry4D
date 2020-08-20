@@ -24,6 +24,7 @@ public:
     float height() { return h; }
     void setKeyEvent(void (*cb)(GLFWwindow*, int, int, int, int)) { glfwSetKeyCallback(win, cb); }
     void use(Scene* s);
+    GLFWwindow* glfwin() { return win; }
 private:
     int w, h;
     GLFWwindow* win;

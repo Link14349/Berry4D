@@ -6,7 +6,7 @@
 
 class Cube : public Object {
 public:
-    Cube(float x, float y, float z, float w) {
+    Cube(float x = 1, float y = 1, float z = 1, float w = 1) {
         x *= .5, y *= .5, z *= .5, w *= .5;
 #define CUBE_PUSH_POINT(a, b, c, d) { points.push_back(new Vector4(a x, b y, c z, d w)); rawPoints.push_back(new Vector4(a x, b y, c z, d w)); }
 #define CUBE_GET_POINT_ID(x, y, z, w) x | (y << 1) | (z << 2) | (w << 3)
@@ -50,6 +50,7 @@ public:
                ,! ,  ,  )
         }
         normal();
+        rotate(Vector4(M_PI / 180));
     }
 private:
 };

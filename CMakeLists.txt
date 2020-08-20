@@ -16,4 +16,4 @@ aux_source_directory(Berry4D src)
 
 link_libraries(${GLFW_LINK} ${FRAMEWORKS_1} ${FRAMEWORKS_2} ${FRAMEWORKS_3} ${FRAMEWORKS_4} ${FRAMEWORKS_5})
 
-add_executable(Berry4D main.cpp src/core.cpp include/core.h src/scene.cpp include/scene.h src/camera.cpp include/camera.h src/object.cpp include/object.h src/vec.cpp include/vec.h include/timestamp.h src/cube.cpp include/cube.h)
+add_executable(Berry4D main.cpp src/core.cpp include/core.h src/scene.cpp include/scene.h src/camera.cpp include/camera.h src/object.cpp include/object.h src/vec.cpp include/vec.h include/timestamp.h src/cube.cpp include/cube.h src/be4dLoader.cpp include/be4dLoader.h src/light.cpp include/light.h)

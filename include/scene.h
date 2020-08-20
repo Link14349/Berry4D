@@ -4,6 +4,7 @@
 #include <list>
 #include "object.h"
 #include "camera.h"
+#include "light.h"
 
 class Scene {
     friend class Camera;
@@ -13,9 +14,12 @@ public:
     void render() { camera->render(); }
     void use(Camera* c) { (camera = c)->scene = this; }
     void push(Object* object) { objects.push_back(object); }
+    void push(Light* light) { lights.push_back(light); }
+    Color ambientLightColor;
 private:
     Camera* camera;
     std::list<Object*> objects;
+    std::list<Light*> lights;
 };
 
 

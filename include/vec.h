@@ -66,9 +66,30 @@ public:
     bool operator==(const Vector4& vec) const { return x == vec.x && y == vec.y && z == vec.z && w == vec.w; }
     float mod2() const { return x * x + y * y + z * z + w * w; }
     float mod() const { return sqrt(x * x + y * y + z * z + w * w); }
+    Vector4 norm() { float im = 1 / mod(); return Vector4(x * im, y * im, z * im, w * im); }
     void rotate(const float[4][4]);
     void rotate(const Vector4&, const float[4][4]);
     float x, y, z, w;
+};
+class Color {
+public:
+    Color(float R = 0, float G = 0, float B = 0) : r(R), g(G), b(B) { }
+    Color operator*(float k) { return Color(r * k, g * k, b * k); }
+    Color operator%(const Color& v) { return Color(r * v.r, g * v.g, b * v.b); }
+    Color& operator%=(const Color& v) {
+        r *= v.r;
+        g *= v.g;
+        b *= v.b;
+        return *this;
+    }
+    Color operator+(const Color& v) { return Color(r + v.r, g + v.g, b + v.g); }
+    Color& operator+=(const Color& v) {
+        r += v.r;
+        g += v.g;
+        b += v.b;
+        return *this;
+    }
+    float r, g, b;
 };
 
 

@@ -19,8 +19,14 @@ void Object::rotate(const Vector4 &r) {
 }
 
 void Object::normal() {
+    auto it = rawNormals.begin();
     for (auto body : bodys) {
-        auto va = body->points[0] - body->points[1], vb = body->points[0] - body->points[2], vc = body->points[0] - body->points[3];
+        auto va = *points[body->points[0]] - *points[body->points[1]],
+             vb = *points[body->points[0]] - *points[body->points[2]],
+             vc = *points[body->points[0]] - *points[body->points[3]];
         ::normal(*body->n, va, vb, vc);
+        if (points[body->points[0]]->operator*(*body->n) < 0)
+            body->n->operator*(-1);
+        **(it++) = *body->n;
     }
 }
