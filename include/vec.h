@@ -63,6 +63,13 @@ public:
         w *= a;
         return *this;
     }
+    Vector4& operator%=(const Vector4 &vec) {
+        x *= vec.x;
+        y *= vec.y;
+        z *= vec.z;
+        w *= vec.w;
+        return *this;
+    }
     bool operator==(const Vector4& vec) const { return x == vec.x && y == vec.y && z == vec.z && w == vec.w; }
     float mod2() const { return x * x + y * y + z * z + w * w; }
     float mod() const { return sqrt(x * x + y * y + z * z + w * w); }

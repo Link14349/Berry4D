@@ -6,12 +6,12 @@
 #include "include/cube.h"
 #include "include/be4dLoader.h"
 
-Cube cube(1, 1, 1, 0.01);
+Cube cube(1, 1, 1, 1);
 Camera camera;
 Object* obj;
 #define V 0.02
 void cb() {
-    obj->rotate(Vector4(0, 0, 0, V));
+    obj->rotate(Vector4(0, V, 0, 0));
     cube.rotate(Vector4(V, V, V, V));
 //    cube.position.w += 0.01;
 }
@@ -42,18 +42,17 @@ int main() {
     char* content = readFileCPTR("link.be4d", len);
     be4dLoader loader((unsigned char*)content, len);
     obj = loader.load();
-    obj->scale(0.01);
     obj->position.w = 10;
     obj->position.y = -4;
     cube.position.w = 1;
     camera.position.w = -2;
     scene.ambientLightColor = Color(1, 1,1);
     scene.push(&light);
-//    scene.push(obj);
+    scene.push(obj);
     glfwSetKeyCallback(berry4D.glfwin(), keyboardFunc);
     berry4D.use(&scene);
     scene.use(&camera);
-    scene.push(&cube);
+//    scene.push(&cube);
     berry4D.render(cb);
     delete obj;
     delete content;

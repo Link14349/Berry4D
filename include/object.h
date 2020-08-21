@@ -31,8 +31,16 @@ public:
     };
     void rotate(const Vector4&);
     void scale(float k) {
-        for (auto point : points) point->operator*(k);
-        for (auto point : rawPoints) point->operator*(k);
+        for (auto point : points) point->operator*=(k);
+        for (auto point : rawPoints) point->operator*=(k);
+    }
+    void scale(const Vector4& k) {
+        for (auto point : points) point->operator%=(k);
+        for (auto point : rawPoints) point->operator%=(k);
+    }
+    void moveOrigin(const Vector4& k) {
+        for (auto point : points) point->operator-=(k);
+        for (auto point : rawPoints) point->operator-=(k);
     }
     Vector4 position;
     ~Object() {
