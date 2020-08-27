@@ -15,7 +15,7 @@ void Camera::render() {
         auto& bodys = object->bodys;
         objpos -= position;
         objpos.rotate(A);
-        if (objpos.w < NEAR_CLIP || objpos.w > FAR_CLIP) continue;
+//        if (objpos.w < NEAR_CLIP || objpos.w > FAR_CLIP) continue;
         Vector4 TPoints[object->points.size()];
         Vector4 NMAPTPoints[object->points.size()];
         Vector4* tpoint = TPoints, *nmtp = NMAPTPoints;
