@@ -17,6 +17,9 @@ private:
     float TAN_hfov_x = 1.732;
     float TAN_hfov_y = 1.732;
     float TAN_hfov_z = 1.732;
+    float iTAN_hfov_x = 1 / TAN_hfov_x;
+    float iTAN_hfov_y = 1 / TAN_hfov_y;
+    float iTAN_hfov_z = 1 / TAN_hfov_z;
     Scene* scene;
     float A[4][4];
 };

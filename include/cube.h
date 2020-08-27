@@ -50,7 +50,6 @@ public:
                ,! ,  ,  )
         }
         normal();
-        rotate(Vector4(M_PI / 180));
     }
 private:
 };
