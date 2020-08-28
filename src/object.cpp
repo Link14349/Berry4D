@@ -30,3 +30,10 @@ void Object::normal() {
         **(it++) = *body->n;
     }
 }
+
+void Object::getRadius() {
+    for (auto p : points) {
+        float r = p->mod();
+        if (r >= radius) radius = r;
+    }
+}

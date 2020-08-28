@@ -4,26 +4,7 @@
 
 void Berry4D::use(Scene *s) {
     scene = s;
-}
-
-static void changeSize(GLsizei w, GLsizei h)
-{
-    if(h == 0)
-        h = 1;
-    glViewport(0, 0, w, h);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    if(w <= h)
-    {
-        glOrtho(0.0f, 300.0f, 0.0f, 300.0f * h/w, 1.0f, -1.0f);
-    }else
-    {
-        glOrtho(0.0f, 300.0f * w/h, 0.0f, 300.0f, 1.0f, -1.0f);
-    }
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    scene->berry4d = this;
 }
 
 int Berry4D::render(void (*cb)()) {

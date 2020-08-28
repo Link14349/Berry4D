@@ -51,6 +51,8 @@ public:
     }
 protected:
     void normal();
+    void getRadius();
+    float radius = 0;
     Vector4 rotation;
     std::vector<Vector4*> points;
     std::list<Vector4*> rawPoints;

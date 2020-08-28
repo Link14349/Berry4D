@@ -6,8 +6,10 @@
 #include "camera.h"
 #include "light.h"
 
+class Berry4D;
 class Scene {
     friend class Camera;
+    friend class Berry4D;
 public:
     Scene() : camera(nullptr) { }
     Scene(Camera* c) : camera(c) { c->scene = this; }
@@ -18,6 +20,7 @@ public:
     Color ambientLightColor;
 private:
     Camera* camera;
+    Berry4D* berry4d;
     std::list<Object*> objects;
     std::list<Light*> lights;
 };

@@ -73,6 +73,7 @@ Object *be4dLoader::load() {
             break;
         }
     }
+    object->getRadius();
 //    object->rotate(Vector4(0.001, 0.001, 0.001, 0.001));
     return object;
 }
