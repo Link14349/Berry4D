@@ -28,9 +28,9 @@ void Camera::render() {
               yw(TAN_hfov_y * clipw),
               zw(TAN_hfov_z * clipw);
         if (
-                xw < objpos.x - radius || -xw > objpos.x + radius ||
-                yw < objpos.y - radius || -yw > objpos.y + radius ||
-                zw < objpos.z - radius || -zw > objpos.z + radius)
+                (xw < objpos.x - radius || -xw > objpos.x + radius) &&
+                (yw < objpos.y - radius || -yw > objpos.y + radius) &&
+                (zw < objpos.z - radius || -zw > objpos.z + radius))
             continue;
         // 进行投影坐标计算
         Vector4 TPoints[object->points.size()];
