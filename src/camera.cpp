@@ -38,8 +38,8 @@ void Camera::render() {
         Vector4* tpoint = TPoints, *nmtp = NMAPTPoints;
         for (auto point : points) {
             tpoint->operator=(*point);
-            tpoint->operator+=(objpos);
             tpoint->rotate(A);
+            tpoint->operator+=(objpos);
             nmtp->operator=(*tpoint);
             tpoint->x /= tpoint->w * TAN_hfov_x * height_width;
             tpoint->y /= tpoint->w * TAN_hfov_y;
