@@ -19,7 +19,9 @@ char* readFileCPTR(const std::string& filename, uint32_t& length) {
     return buffer;
 }
 
-Object *be4dLoader::load() {
+Object *be4dLoader::load(
+        bool barrel// 柱体: 当这个为true时由3d文件生成的四维模型将由三角形生成柱体
+        ) {
     if (content[0] != 'b' || content[1] != 'e' || content[2] != '4' || content[3] != 'f') return nullptr;
     Object* object = new Object;
     auto adr = content + 5;
@@ -40,12 +42,31 @@ Object *be4dLoader::load() {
             }
             while (adr < content + len) {
                 uint32_t a = parseUint32(adr), b = parseUint32(adr), c = parseUint32(adr);
-                auto t1 = new Vector4(*object->points[a]), t2 = new Vector4(*object->points[a]);
-                t1->w = 0.001, t2->w = 0.001;
-                object->points.push_back(t1);
-                object->rawPoints.push_back(t2);
-                object->bodys.push_back(new Object::Body(new Vector4, a, b, c, object->points.size() - 1));
-                object->rawNormals.push_back(new Vector4);
+                if (barrel) {
+                    auto ta1 = new Vector4(*object->points[a]), ta2 = new Vector4(*object->points[a]);
+                    auto tb1 = new Vector4(*object->points[b]), tb2 = new Vector4(*object->points[b]);
+                    auto tc1 = new Vector4(*object->points[c]), tc2 = new Vector4(*object->points[c]);
+                    ta1->w = ta2->w = tb1->w = tb2->w = tc1->w = tc2->w = 0.001;
+                    object->points.push_back(ta1);
+                    object->points.push_back(tb1);
+                    object->points.push_back(tc1);
+                    object->rawPoints.push_back(ta2);
+                    object->rawPoints.push_back(tb2);
+                    object->rawPoints.push_back(tc2);
+                    object->bodys.push_back(new Object::Body(new Vector4, a, b, c, object->points.size() - 3));
+                    object->bodys.push_back(new Object::Body(new Vector4, c, object->points.size() - 1, object->points.size() - 2, object->points.size() - 3));
+                    object->bodys.push_back(new Object::Body(new Vector4, c, object->points.size() - 2, b, object->points.size() - 3));
+                    object->rawNormals.push_back(new Vector4);
+                    object->rawNormals.push_back(new Vector4);
+                    object->rawNormals.push_back(new Vector4);
+                } else {
+                    auto t1 = new Vector4(*object->points[a]), t2 = new Vector4(*object->points[a]);
+                    t1->w = 0.001, t2->w = 0.001;
+                    object->points.push_back(t1);
+                    object->rawPoints.push_back(t2);
+                    object->bodys.push_back(new Object::Body(new Vector4, a, b, c, object->points.size() - 1));
+                    object->rawNormals.push_back(new Vector4);
+                }
             }
             object->normal();
             break;
@@ -74,7 +95,7 @@ Object *be4dLoader::load() {
         }
     }
     object->getRadius();
-//    object->rotate(Vector4(0.001, 0.001, 0.001, 0.001));
+//    object->rotate(Vector4(.00001f));
     return object;
 }
 

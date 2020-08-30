@@ -15,6 +15,7 @@ int Berry4D::render(void (*cb)()) {
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 //    gluPerspective(2.1, 1, 0.1, 100);
+    auto renderStart = getCurrentTime();
     while(!glfwWindowShouldClose(win)){
         glfwGetWindowSize(win, &w, &h);
         glMatrixMode(GL_PROJECTION);
@@ -25,10 +26,21 @@ int Berry4D::render(void (*cb)()) {
         glDepthFunc(GL_LESS);
         glLoadIdentity();
         auto start = getCurrentTime();
-        scene->render();
         if (cb) cb();
         auto end = getCurrentTime();
         glfwSetWindowTitle(win, (title + " FPS: " + std::to_string(1000 / (float)(end - start))).c_str());
+        scene->render();
+        for (auto it = actions.begin(); it != actions.end(); ) {
+            if (end - renderStart >= (*it)->st) {
+                if (end - renderStart >= (*it)->ed) {
+                    delete *it;
+                    actions.erase(it++);
+                    continue;
+                }
+                (*it)->action();
+            }
+            it++;
+        }
         glfwSwapBuffers(win);
         glfwPollEvents();
     }

@@ -33,10 +33,12 @@ public:
     void scale(float k) {
         for (auto point : points) point->operator*=(k);
         for (auto point : rawPoints) point->operator*=(k);
+        radius *= k;
     }
     void scale(const Vector4& k) {
         for (auto point : points) point->operator%=(k);
         for (auto point : rawPoints) point->operator%=(k);
+        getRadius();
     }
     void moveOrigin(const Vector4& k) {
         for (auto point : points) point->operator-=(k);

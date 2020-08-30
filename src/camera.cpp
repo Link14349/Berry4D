@@ -1,11 +1,13 @@
 #include <GLFW/glfw3.h>
 #include <GLUT/glut.h>
 #include <map>
+#include <cmath>
 #include "../include/camera.h"
 #include "../include/scene.h"
 #include "../include/core.h"
 
-#define NEAR_CLIP 0.0001f
+#define NEAR_CLIP 0.000001f
+#define INV_NEAR_CLIP 1.0f / NEAR_CLIP
 #define FAR_CLIP 5000
 void Camera::render() {
     const float height_width = scene->berry4d->width() / scene->berry4d->height();
@@ -20,7 +22,7 @@ void Camera::render() {
         objpos -= position;
         objpos.rotate(A);
         // 一些剔除物体的优化操作
-        if (objpos.w + object->radius < NEAR_CLIP || objpos.w - object->radius > FAR_CLIP) continue;
+        if (objpos.w + radius < NEAR_CLIP || objpos.w - radius > FAR_CLIP) continue;
         float clipw = objpos.w + radius;
         float xw(TAN_hfov_x * clipw),
               yw(TAN_hfov_y * clipw),
@@ -28,8 +30,7 @@ void Camera::render() {
         if (
                 xw < objpos.x - radius || -xw > objpos.x + radius ||
                 yw < objpos.y - radius || -yw > objpos.y + radius ||
-                zw < objpos.z - radius || -zw > objpos.z + radius
-                )
+                zw < objpos.z - radius || -zw > objpos.z + radius)
             continue;
         // 进行投影坐标计算
         Vector4 TPoints[object->points.size()];
@@ -70,8 +71,8 @@ void Camera::render() {
                         // 渲染部分：计算颜色&解决z-fighting
                         // 渲染
                         normal3D(norm3d, *p1, *p2, *p3);
-                        norm3d *= 0.001f / norm3d.mod();
-                        glColor3f(.1 + norm3d.y * 50, .7 + norm3d.y * 500, .5 + norm3d.y * 200);
+                        if (norm3d.mod() > 0) norm3d *= 0.001f / norm3d.mod();
+                        glColor3f(.1 + norm3d.y * 50, .5 + norm3d.y * 500, .5 + norm3d.y * 200);
                         // 解决z-fighting的偏移操作
                         (TPoints + body->points[i])->operator+=(norm3d);
                         (TPoints + body->points[j])->operator+=(norm3d);
@@ -89,14 +90,12 @@ void Camera::render() {
                                         n2(NMAPTPoints[notnpoint3[1]] - NMAPTPoints[npoint3[0]]);
                                 float t1 = (NEAR_CLIP - p.w) / n1.w;
                                 float t2 = (NEAR_CLIP - p.w) / n2.w;
-                                float invPW1 = 1 / NMAPTPoints[notnpoint3[0]].w;
-                                float invPW2 = 1 / NMAPTPoints[notnpoint3[1]].w;
-                                float x1((n1.x * t1 + p.x) * invPW1 * iTAN_hfov_x * height_width),
-                                      y1((n1.y * t1 + p.y) * invPW1 * iTAN_hfov_y),
-                                      z1((n1.z * t1 + p.z) * invPW1 * iTAN_hfov_z * height_width);
-                                float x2((n2.x * t2 + p.x) * invPW2 * iTAN_hfov_x * height_width),
-                                      y2((n2.y * t2 + p.y) * invPW2 * iTAN_hfov_y),
-                                      z2((n2.z * t2 + p.z) * invPW2 * iTAN_hfov_z * height_width);
+                                float x1((n1.x * t1 + p.x) * INV_NEAR_CLIP * iTAN_hfov_x * height_width),
+                                      y1((n1.y * t1 + p.y) * INV_NEAR_CLIP * iTAN_hfov_y),
+                                      z1((n1.z * t1 + p.z) * INV_NEAR_CLIP * iTAN_hfov_z * height_width);
+                                float x2((n2.x * t2 + p.x) * INV_NEAR_CLIP * iTAN_hfov_x * height_width),
+                                      y2((n2.y * t2 + p.y) * INV_NEAR_CLIP * iTAN_hfov_y),
+                                      z2((n2.z * t2 + p.z) * INV_NEAR_CLIP * iTAN_hfov_z * height_width);
 
                                 tmpPosition3d[0] = x1,
                                 tmpPosition3d[1] = y1,
@@ -123,14 +122,12 @@ void Camera::render() {
                                         n2(NMAPTPoints[npoint3[1]] - NMAPTPoints[notnpoint3[0]]);
                                 float t1 = (NEAR_CLIP - p.w) / n1.w;
                                 float t2 = (NEAR_CLIP - p.w) / n2.w;
-                                float invPW1 = 1 / NMAPTPoints[notnpoint3[0]].w;
-                                float invPW2 = 1 / NMAPTPoints[notnpoint3[1]].w;
-                                float x1((n1.x * t1 + p.x) * invPW1 * iTAN_hfov_x * height_width),
-                                        y1((n1.y * t1 + p.y) * invPW1 * iTAN_hfov_y),
-                                        z1((n1.z * t1 + p.z) * invPW1 * iTAN_hfov_z * height_width);
-                                float x2((n2.x * t2 + p.x) * invPW2 * iTAN_hfov_x * height_width),
-                                        y2((n2.y * t2 + p.y) * invPW2 * iTAN_hfov_y),
-                                        z2((n2.z * t2 + p.z) * invPW2 * iTAN_hfov_z * height_width);
+                                float x1((n1.x * t1 + p.x) * INV_NEAR_CLIP * iTAN_hfov_x * height_width),
+                                        y1((n1.y * t1 + p.y) * INV_NEAR_CLIP * iTAN_hfov_y),
+                                        z1((n1.z * t1 + p.z) * INV_NEAR_CLIP * iTAN_hfov_z * height_width);
+                                float x2((n2.x * t2 + p.x) * INV_NEAR_CLIP * iTAN_hfov_x * height_width),
+                                        y2((n2.y * t2 + p.y) * INV_NEAR_CLIP * iTAN_hfov_y),
+                                        z2((n2.z * t2 + p.z) * INV_NEAR_CLIP * iTAN_hfov_z * height_width);
                                 tmpPosition3d[0] = x1,
                                 tmpPosition3d[1] = y1,
                                 tmpPosition3d[2] = z1;

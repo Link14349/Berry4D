@@ -12,7 +12,7 @@ public:
     be4dLoader() : content(nullptr), len(0) { }
     be4dLoader(const unsigned char* const c, uint32_t l) : content(c), len(l) { }
     void reload(const unsigned char* const c, uint32_t l) { content = c, len = l; }
-    Object* load();
+    Object* load(bool = false);
     void write(FILE*, Object*);
 private:
     static uint32_t parseUint32(const unsigned char*& c) {
